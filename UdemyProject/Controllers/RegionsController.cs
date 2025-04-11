@@ -16,7 +16,7 @@ namespace UdemyProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    
     public class RegionsController : ControllerBase
     {
         //private readonly NZWalksDbContext dbContext;
@@ -31,6 +31,7 @@ namespace UdemyProject.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Reader, Writer")]
         public async Task<IActionResult> GetAll()
         {
             //you continue working while I wait for my query results
@@ -43,6 +44,7 @@ namespace UdemyProject.Controllers
 
         [HttpGet]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Reader, Writer")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             var regionDomain = await regionRepository.GetByIdAsync(id);
@@ -56,6 +58,7 @@ namespace UdemyProject.Controllers
 
         [HttpPost]
         [ValidateModel]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> CreateRegion([FromRoute] AddRegionRequestDto addRegionRequestDto)
         {        
                 var newRegionDomain = mapper.Map<Region>(addRegionRequestDto);
@@ -69,6 +72,7 @@ namespace UdemyProject.Controllers
         [HttpPut]
         [Route("{id:Guid}")]
         [ValidateModel]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> UpdateRegions([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
         {
            
@@ -83,7 +87,8 @@ namespace UdemyProject.Controllers
         }
 
         [HttpDelete]
-        [Route("{id:Guid})")]
+        [Route("{id:Guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> DeleteRegions([FromRoute] Guid id)
         {
             
